@@ -111,6 +111,7 @@ export class Angular2TokenService implements CanActivate {
             signOutPath:                'auth/sign_out',
             validateTokenPath:          'auth/validate_token',
             signOutFailedValidate:      false,
+            signOutCallingApi:           true,
 
             registerAccountPath:        'auth',
             deleteAccountPath:          'auth',
@@ -244,6 +245,18 @@ export class Angular2TokenService implements CanActivate {
         return observ;
     }
 
+    signOutWithoutApi(): void {
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('client');
+        localStorage.removeItem('expiry');
+        localStorage.removeItem('tokenType');
+        localStorage.removeItem('uid');
+
+        this.atCurrentAuthData = null;
+        this.atCurrentUserType = null;
+        this.atCurrentUserData = null;
+    }
+
     // Validate token request
     validateToken(): Observable<Response> {
         let observ = this.get(this.getUserPath() + this.atOptions.validateTokenPath);
@@ -252,7 +265,11 @@ export class Angular2TokenService implements CanActivate {
             res => this.atCurrentUserData = res.json().data,
             error => {
                 if (error.status === 401 && this.atOptions.signOutFailedValidate) {
-                    this.signOut();
+                    if(this.atOptions.signOutCallingApi) {
+                        this.signOutWithoutApi();
+                    } else {
+                        this.signOut();
+                    }
                 }
             });
 

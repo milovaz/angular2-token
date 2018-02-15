@@ -73,6 +73,7 @@ export interface Angular2TokenOptions {
     signOutPath?:               string;
     validateTokenPath?:         string;
     signOutFailedValidate?:     boolean;
+    signOutCallingApi?:         boolean;
 
     deleteAccountPath?:         string;
     registerAccountPath?:       string;
