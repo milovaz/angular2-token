@@ -255,6 +255,10 @@ export class Angular2TokenService implements CanActivate {
         this.atCurrentAuthData = null;
         this.atCurrentUserType = null;
         this.atCurrentUserData = null;
+
+        // Redirect user to sign in if signInRedirect is set
+        if(this.router && this.atOptions.signInRedirect)
+            this.router.navigate([this.atOptions.signInRedirect]);
     }
 
     // Validate token request
